@@ -6,7 +6,7 @@
 - 构建：GCC + NASM + LD
 - 调试：QEMU + GDB
 # 克隆仓库
-git clone https://github.com/你的账户名/XuanJi-OS.git
+git clone https://github.com/xiaoxiaohaizhe/XuanJi-OS.git
 
 # 进入目录
 cd XuanJi-OS
