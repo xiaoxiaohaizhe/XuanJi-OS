@@ -1,0 +1,6 @@
+*.o
+*.bin
+*.iso
+kernel.bin
+xuanji.iso
+iso/
