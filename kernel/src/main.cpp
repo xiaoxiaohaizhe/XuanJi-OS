@@ -1,9 +1,11 @@
+#include "print.h"
+
 extern "C" void kmain() {
-    char* video_memory = (char*) 0xB8000;
-    const char* msg = "Hello, XuanJi OS!";
-    for (int i = 0; msg[i] != '\0'; i++) {
-        video_memory[i * 2] = msg[i];
-        video_memory[i * 2 + 1] = 0x0F;
-    }
+    printf("=== XuanJi OS ===\n");
+    printf("Kernel loaded successfully.\n");
+    printf("Printf module test: %d, 0x%x\n", 2026, 0xB8000);
+    printf("Next step: GDT initialization.\n");
+    printf("System halted.\n");
+    
     while (1) {}
 }
