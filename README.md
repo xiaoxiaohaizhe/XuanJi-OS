@@ -9,7 +9,7 @@
 | 引导程序 (Multiboot) | ✅ 完成 |
 | 屏幕输出 (VGA 文本模式) | ✅ 完成 |
 | 格式化输出 (printf) | ✅ 完成 |
-| GDT (全局描述符表) | ⏳ 待开发 |
+| GDT (全局描述符表) | ⏳ 开发中 |
 | IDT (中断描述符表) | ⏳ 待开发 |
 | 内存管理 | ⏳ 待开发 |
 | 进程调度 | ⏳ 待开发 |
@@ -30,7 +30,7 @@ sudo apt install g++ nasm grub-pc-bin grub-common xorriso qemu-system-x86 -y
 
 ```bash
 git clone https://github.com/xiaoxiaohaizhe/XuanJi-OS.git
-cd XuanJi-OS
+cd ~/XuanJi-OS
 make
 make run
 ```

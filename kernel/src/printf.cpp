@@ -1,10 +1,12 @@
 #include "print.h"
-// 已有的字符输出函数
+
+// ============ 基础输出函数 ============
+
+static int cursor = 0;
+
 void print_char(char c) {
-    char* video_memory = (char*) 0xB8000;
-    static int cursor = 0;
+    char* video_memory = (char*)0xB8000;
     if (c == '\n') {
-        // 换行处理：跳到下一行
         cursor = (cursor / 80 + 1) * 80;
         return;
     }
@@ -13,32 +15,81 @@ void print_char(char c) {
     cursor++;
 }
 
-// 直接调用 print_string，使函数具备字符串输出能力
 void print_string(const char* str) {
     for (int i = 0; str[i] != '\0'; i++) {
         print_char(str[i]);
     }
 }
 
-void print_int(int num) { /* 同上 */ }
-void print_hex(unsigned int num) { /* 同上 */ }
+void print_int(int num) {
+    if (num == 0) {
+        print_char('0');
+        return;
+    }
+    if (num < 0) {
+        print_char('-');
+        num = -num;
+    }
+    char digits[12];
+    int i = 0;
+    while (num > 0) {
+        digits[i++] = '0' + num % 10;
+        num /= 10;
+    }
+    while (i > 0) {
+        print_char(digits[--i]);
+    }
+}
+
+void print_hex(unsigned int num) {
+    const char* hex = "0123456789ABCDEF";
+    char digits[8];
+    for (int i = 7; i >= 0; i--) {
+        digits[i] = hex[num & 0xF];
+        num >>= 4;
+    }
+    print_string("0x");
+    for (int i = 0; i < 8; i++) {
+        print_char(digits[i]);
+    }
+}
+
+// ============ printf ============
 
 void printf(const char* format, ...) {
-    va_list args;
-    va_start(args, format);
+    uint32_t* arg = (uint32_t*)&format + 1;
+
     for (int i = 0; format[i] != '\0'; i++) {
         if (format[i] == '%') {
             i++;
             switch (format[i]) {
-                case 'd': print_int(va_arg(args, int)); break;
-                case 'x': print_hex(va_arg(args, unsigned int)); break;
-                case 's': print_string(va_arg(args, const char*)); break;
-                case 'c': print_char((char)va_arg(args, int)); break;
-                default: print_char('%'); print_char(format[i]); break;
+                case 'd': {
+                    int val = (int)*arg++;
+                    print_int(val);
+                    break;
+                }
+                case 'x': {
+                    unsigned int val = *arg++;
+                    print_hex(val);
+                    break;
+                }
+                case 's': {
+                    const char* str = (const char*)*arg++;
+                    print_string(str);
+                    break;
+                }
+                case 'c': {
+                    char c = (char)*arg++;
+                    print_char(c);
+                    break;
+                }
+                default:
+                    print_char('%');
+                    print_char(format[i]);
+                    break;
             }
         } else {
             print_char(format[i]);
         }
     }
-    va_end(args);
 }

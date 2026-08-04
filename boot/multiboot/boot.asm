@@ -8,13 +8,25 @@ section .text
 global start
 extern kmain
 
+; 全局变量，供 C++ 读取
+global grub_magic
+global grub_info
+
 start:
+    ; 先把 GRUB 参数保存到全局变量
+    mov [grub_magic], eax
+    mov [grub_info], ebx
+
     mov esp, stack_top
-    push eax
-    push ebx
     call kmain
     cli
     hlt
+
+section .data
+grub_magic:
+    dd 0
+grub_info:
+    dd 0
 
 section .bss
 align 16

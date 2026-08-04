@@ -1,8 +1,6 @@
 #ifndef PRINT_H
 #define PRINT_H
-
-#include <stdarg.h>
-
+#include <stdint.h>
 void print_char(char c);
 void print_string(const char* str);
 void print_int(int num);
