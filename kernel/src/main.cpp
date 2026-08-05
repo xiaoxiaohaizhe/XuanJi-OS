@@ -1,39 +1,42 @@
 #include "print.h"
 #include "gdt.h"
 #include "memory.h"
+#include "idt.h"
 #include <stdint.h>
 
-// 声明 boot.asm 里定义的全局变量
 extern "C" uint32_t grub_magic;
 extern "C" uint32_t grub_info;
 
 extern "C" void kmain() {
-    uint32_t magic = grub_magic;
-    uint32_t addr = grub_info;
-
     printf("=== XuanJi OS ===\n");
-    printf("GRUB magic: 0x%x, info addr: 0x%x\n", magic, addr);
-
-    if (magic != 0x2BADB002) {
-        printf("Invalid GRUB magic! System halted.\n");
-        while (1) {}
-    }
+    printf("GRUB magic: 0x%x, info addr: 0x%x\n", grub_magic, grub_info);
 
     gdt_init();
     gdt_load();
 
-    // 用 GRUB 传入的 addr 初始化物理内存管理器
-    pmm_init(addr);
+    pmm_init(grub_info);
 
-    // 测试分配
+    // 测试物理内存
     void* p1 = pmm_alloc();
     void* p2 = pmm_alloc();
     printf("Allocated: 0x%x, 0x%x\n", (uint32_t)p1, (uint32_t)p2);
-
     pmm_free(p1);
     printf("Freed: 0x%x\n", (uint32_t)p1);
     printf("Used pages: %d\n", pmm_used_pages());
 
+    // IDT
+    idt_init();
+    idt_load();
+
+    uint32_t base;
+    uint16_t limit;
+    idt_get_info(&base, &limit);
+    printf("IDT loaded: base=0x%x, limit=%d\n", base, limit);
+
+    // 测试 int 3，看系统是否重启
+    printf("Testing int 3...\n");
+    __asm__ volatile ("sti");
+    printf("Keyboard interrupt enabled. Press any key...\n");
     printf("System halted.\n");
     while (1) {}
 }
