@@ -46,10 +46,18 @@ XuanJi-OS/
 │       └── boot.asm          # 引导程序
 ├── kernel/
 │   ├── include/
-│   │   └── print.h           # printf 头文件
+│   │   └── print.h  # printf 头文件
+│   │   └── idt.h
+│   │   └── isr.h
+│   │   └── memory.h
 │   └── src/
 │       ├── main.cpp          # 内核入口 kmain()
-│       └── print.cpp         # 格式化输出
+│       └── printf.cpp         # 格式化输出
+│       └── interrupt.asm
+│       └── isr.cpp
+│       └── meomory.cpp
+│       └── idt.cpp
+│       └── gdt.cpp
 ├── linker.ld                 # 链接脚本
 ├── Makefile                  # 构建文件
 ├── README.md
