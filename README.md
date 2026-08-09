@@ -55,7 +55,7 @@ XuanJi-OS/
 │       └── printf.cpp         # 格式化输出
 │       └── interrupt.asm
 │       └── isr.cpp
-│       └── meomory.cpp
+│       └── memory.cpp
 │       └── idt.cpp
 │       └── gdt.cpp
 ├── linker.ld                 # 链接脚本
