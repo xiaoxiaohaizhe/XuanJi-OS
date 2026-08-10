@@ -50,6 +50,7 @@ XuanJi-OS/
 │   │   └── idt.h
 │   │   └── isr.h
 │   │   └── memory.h
+│   │   └── gdt.h
 │   └── src/
 │       ├── main.cpp          # 内核入口 kmain()
 │       └── printf.cpp         # 格式化输出
