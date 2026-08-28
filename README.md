@@ -9,8 +9,8 @@
 | 引导程序 (Multiboot) | ✅ 完成 |
 | 屏幕输出 (VGA 文本模式) | ✅ 完成 |
 | 格式化输出 (printf) | ✅ 完成 |
-| GDT (全局描述符表) | ⏳ 开发中 |
-| IDT (中断描述符表) | ⏳ 开发中 |
+| GDT (全局描述符表) | ✅ 完成 |
+| IDT (中断描述符表) | ✅ 完成 |
 | 内存管理 | ⏳ 待开发 |
 | 进程调度 | ⏳ 待开发 |
 ......
@@ -51,6 +51,7 @@ XuanJi-OS/
 │   │   └── isr.h
 │   │   └── memory.h
 │   │   └── gdt.h
+│   │   └── shell.h
 │   └── src/
 │       ├── main.cpp          # 内核入口 kmain()
 │       └── printf.cpp         # 格式化输出
@@ -59,6 +60,7 @@ XuanJi-OS/
 │       └── memory.cpp
 │       └── idt.cpp
 │       └── gdt.cpp
+│       └── shell.cpp
 ├── linker.ld                 # 链接脚本
 ├── Makefile                  # 构建文件
 ├── README.md
