@@ -10,8 +10,6 @@ void paging_init() {
     page_table_kernel = (uint32_t*)pmm_alloc();
 
     if (page_directory == nullptr || page_table_kernel == nullptr) {
-        // 此时 printf 可能还不可用，但保留
-        printf("PMM: failed to allocate pages for paging\n");
         return;
     }
 
@@ -47,6 +45,4 @@ void paging_init() {
     cr0 |= 0x80000000;
     __asm__ volatile ("mov %0, %%cr0" : : "r"(cr0));
 
-    // 分页启用后输出确认信息
-    printf("Paging enabled.\n");
 }

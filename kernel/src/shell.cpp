@@ -71,7 +71,7 @@ void shell_process_command() {
     }
     else if (my_strncmp(key_buffer, "version", 7) == 0) 
     {
-        printf("XuanJi-OS v1.21.0 (2026-08-28)\n");
+        printf("XuanJi-OS v1.23.0 (2026-08-28)\n");
     } 
     else 
     {
@@ -88,8 +88,6 @@ void shell_process_command() {
     printf("> ");
 }
 void shell_init() {
-    printf("=== XuanJi Shell ===\n");
-    printf("Type 'help' for commands.\n");
     printf("> ");
     
     while (1) {

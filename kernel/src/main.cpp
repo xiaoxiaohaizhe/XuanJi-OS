@@ -14,15 +14,10 @@ extern "C" void kmain() {
 
     gdt_init();
     gdt_load();
-
     pmm_init(grub_info);
-
+    paging_init();
     idt_init();
     idt_load();
-
-    printf("Testing int 33...\n");
-    __asm__ volatile ("int $33");
-    printf("int 33 returned.\n");
 
     __asm__ volatile ("sti");
 

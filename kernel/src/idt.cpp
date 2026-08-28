@@ -33,11 +33,6 @@ extern "C" void idt_init() {
     idtr.limit = sizeof(idt) - 1;
     idtr.base = (uint32_t)idt;
 
-    // 调试输出
-    printf("isr33 addr: 0x%x\n", (uint32_t)isr33);
-    printf("idtr.base: 0x%x, limit: %d\n", idtr.base, idtr.limit);
-    printf("idt array addr: 0x%x\n", (uint32_t)idt);
-
     // PIC 初始化
     __asm__ volatile (
         "mov $0x11, %%al\n"
@@ -60,12 +55,6 @@ extern "C" void idt_init() {
         "out %%al, $0xA1\n"
         ::: "al", "memory"
     );
-
-    printf("PIC initialized.\n");
-
-    // 停在这里，以便查看输出
-    // printf("IDT init done. Halted.\n");
-    // while (1) {}
 }
 
 void idt_get_info(uint32_t* base, uint16_t* limit) {
