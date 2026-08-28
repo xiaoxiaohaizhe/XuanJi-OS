@@ -55,7 +55,7 @@ void shell_process_command() {
     } 
     else if (my_strncmp(key_buffer, "help", 4) == 0) 
     {
-        printf("Commands: help, clear, echo <text>, hello\n");
+        printf("Commands: help, clear, echo <text>, hello,version\n");
     } 
     else if (my_strncmp(key_buffer, "clear", 5) == 0) 
     {
@@ -68,6 +68,10 @@ void shell_process_command() {
     else if (my_strncmp(key_buffer, "hello", 5) == 0) 
     {
         printf("hello can I help you?\n");
+    }
+    else if (my_strncmp(key_buffer, "version", 7) == 0) 
+    {
+        printf("XuanJi-OS v1.21.0 (2026-08-28)\n");
     } 
     else 
     {
