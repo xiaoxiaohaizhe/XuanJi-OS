@@ -32,8 +32,6 @@ void gdt_init() {
     // 设置 GDTR
     gdtr.limit = sizeof(gdt) - 1;
     gdtr.base = (uint32_t)&gdt;
-    
-    printf("GDT initialized. Base: 0x%x, Limit: %d\n", gdtr.base, gdtr.limit);
 }
 
 // 加载 GDT 到 CPU
@@ -51,5 +49,4 @@ extern "C" void gdt_load() {
         : : "m"(gdtr)
         : "eax", "memory"
     );
-    printf("GDT loaded and segments refreshed.\n");
 }

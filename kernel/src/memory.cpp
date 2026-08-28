@@ -52,8 +52,6 @@ void pmm_init(uint32_t mb_info_addr) {
         return;
     }
 
-    printf("PMM: Memory map:\n");
-
     uint32_t mmap_addr = info->mmap_addr;
     uint32_t mmap_end = mmap_addr + info->mmap_length;
     multiboot_mmap_entry* entry = (multiboot_mmap_entry*)mmap_addr;
@@ -65,9 +63,6 @@ void pmm_init(uint32_t mb_info_addr) {
         uint32_t len_high = (uint32_t)(entry->len >> 32);
 
         if (entry->type == 1) {  // MULTIBOOT_MEMORY_AVAILABLE
-            printf("  Available: 0x%x%08x - 0x%x%08x\n",
-                   addr_high, addr_low, addr_high, addr_low + len_low);
-
             // 忽略 1MB 以下的内存
             if (addr_low < 0x100000) {
                 addr_low = 0x100000;
@@ -76,7 +71,6 @@ void pmm_init(uint32_t mb_info_addr) {
 
             // 忽略地址大于 4GB 的部分（32位系统只能访问 4GB）
             if (addr_high > 0) {
-                // 32 位系统不支持 4GB 以上内存
                 continue;
             }
 
@@ -89,16 +83,12 @@ void pmm_init(uint32_t mb_info_addr) {
                 free_list = page;
                 total_pages++;
             }
-        } else {
-            printf("  Reserved: 0x%x%08x - 0x%x%08x\n",
-                   addr_high, addr_low, addr_high, addr_low + len_low);
         }
 
         entry = (multiboot_mmap_entry*)((uint32_t)entry + entry->size + 4);
     }
 
     used_pages = 0;
-    printf("PMM: %d pages available\n", total_pages);
 }
 
 void* pmm_alloc() {

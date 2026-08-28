@@ -5,6 +5,11 @@
 static IDTEntry idt[256];
 IDTPtr idtr;
 
+extern "C" void isr0();
+extern "C" void isr1();
+extern "C" void isr2();
+extern "C" void isr3();
+extern "C" void isr33();
 
 static void idt_set_gate(int num, uint32_t base, uint16_t selector, uint8_t flags) {
     idt[num].base_low  = base & 0xFFFF;
@@ -16,23 +21,19 @@ static void idt_set_gate(int num, uint32_t base, uint16_t selector, uint8_t flag
 
 extern "C" void idt_init() {
     for (int i = 0; i < 256; i++) {
-        idt[i].base_low = 0;
-        idt[i].selector = 0;
-        idt[i].zero = 0;
-        idt[i].flags = 0;
-        idt[i].base_high = 0;
+        idt_set_gate(i, 0, 0, 0);
     }
 
-    extern uint32_t isr0;
-    idt_set_gate(0, (uint32_t)&isr0, 0x08, 0x8E);
-
-    extern uint32_t isr33;
-    idt_set_gate(33, (uint32_t)&isr33, 0x08, 0x8E);
+    idt_set_gate(0, (uint32_t)isr0, 0x08, 0x8E);
+    idt_set_gate(1, (uint32_t)isr1, 0x08, 0x8E);
+    idt_set_gate(2, (uint32_t)isr2, 0x08, 0x8E);
+    idt_set_gate(3, (uint32_t)isr3, 0x08, 0x8E);
+    idt_set_gate(33, (uint32_t)isr33, 0x08, 0x8E);
 
     idtr.limit = sizeof(idt) - 1;
     idtr.base = (uint32_t)idt;
 
-    // 初始化 PIC，启用键盘中断
+    // PIC 初始化
     __asm__ volatile (
         "mov $0x11, %%al\n"
         "out %%al, $0x20\n"
@@ -50,15 +51,17 @@ extern "C" void idt_init() {
         "out %%al, $0xA1\n"
         "mov $0xFD, %%al\n"
         "out %%al, $0x21\n"
+        "mov $0xFF, %%al\n"
+        "out %%al, $0xA1\n"
         ::: "al", "memory"
     );
-
-    printf("IDT initialized.\n");
 }
+
 void idt_get_info(uint32_t* base, uint16_t* limit) {
     *base = idtr.base;
     *limit = idtr.limit;
 }
+
 extern "C" void idt_load() {
     __asm__ volatile ("lidt %0" : : "m"(idtr));
 }

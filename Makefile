@@ -11,7 +11,7 @@ ASMFLAGS = -f elf32
 LDFLAGS = -m elf_i386 -T linker.ld
 
 # 源文件列表
-CXX_SOURCES = kernel/src/main.cpp kernel/src/printf.cpp kernel/src/gdt.cpp kernel/src/memory.cpp kernel/src/idt.cpp kernel/src/isr.cpp 
+CXX_SOURCES = kernel/src/main.cpp kernel/src/printf.cpp kernel/src/gdt.cpp kernel/src/memory.cpp kernel/src/idt.cpp kernel/src/isr.cpp kernel/src/paging.cpp
 CXX_OBJECTS = $(CXX_SOURCES:.cpp=.o)
 ASM_OBJECTS = $(ASM_SOURCES:.asm=.o)
 ASM_SOURCES = boot/multiboot/boot.asm kernel/src/interrupt.asm
