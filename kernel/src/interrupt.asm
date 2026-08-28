@@ -1,7 +1,6 @@
 section .text
 global isr0, isr1, isr2, isr3,isr33
 extern isr_handler
-extern isr_handler
 extern idtr
 extern grub_magic
 extern grub_info 

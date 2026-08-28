@@ -2,8 +2,7 @@
 
 // ============ 基础输出函数 ============
 
-static int cursor = 0;
-
+int cursor = 0;
 void print_char(char c) {
     char* video_memory = (char*)0xB8000;
     if (c == '\n') {
