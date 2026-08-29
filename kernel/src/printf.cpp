@@ -15,6 +15,12 @@ void print_char(char c) {
 }
 
 void print_string(const char* str) {
+    // ★ 空指针保护
+    if (str == nullptr || (uint32_t)str < 0x100000) {
+        print_char('?');
+        print_char('?');
+        return;
+    }
     for (int i = 0; str[i] != '\0'; i++) {
         print_char(str[i]);
     }
@@ -56,6 +62,12 @@ void print_hex(unsigned int num) {
 // ============ printf ============
 
 void printf(const char* format, ...) {
+    // ★ format 空指针保护
+    if (format == nullptr || (uint32_t)format < 0x100000) {
+        print_string("(null)");
+        return;
+    }
+    
     uint32_t* arg = (uint32_t*)&format + 1;
 
     for (int i = 0; format[i] != '\0'; i++) {
@@ -74,7 +86,11 @@ void printf(const char* format, ...) {
                 }
                 case 's': {
                     const char* str = (const char*)*arg++;
-                    print_string(str);
+                    if (str == nullptr || (uint32_t)str < 0x100000) {
+                        print_string("(null)");
+                    } else {
+                        print_string(str);
+                    }
                     break;
                 }
                 case 'c': {

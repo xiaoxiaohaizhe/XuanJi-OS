@@ -23,12 +23,10 @@ void shell_clear() {
 }
 
 void shell_echo() {
-    // 从 key_buffer 里提取参数（跳过 "echo "）
     char* p = key_buffer;
     
     // 跳过 "echo"
-    while (*p == ' ') p++;
-    while (*p != ' ' && *p != '\0') p++;
+    while (*p && *p != ' ') p++;
     while (*p == ' ') p++;
     
     if (*p == '\0') {
@@ -36,9 +34,7 @@ void shell_echo() {
         return;
     }
     
-    printf("\n");
-    print_string(p);
-    printf("\n");
+    printf("\n%s\n", p);
 }
 
 void shell_process_command() {
@@ -71,8 +67,8 @@ void shell_process_command() {
     }
     else if (my_strncmp(key_buffer, "version", 7) == 0) 
     {
-        printf("XuanJi-OS v1.23.0 (2026-08-28)\n");
-    } 
+        printf("XuanJi-OS " VERSION "\n");
+    }
     else 
     {
         printf("Unknown command: ");

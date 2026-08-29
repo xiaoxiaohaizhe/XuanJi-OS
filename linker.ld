@@ -12,6 +12,11 @@ SECTIONS
         *(.text)
     }
 
+    .rodata : {
+        *(.rodata)
+        *(.rodata.*)
+    }
+
     .data : {
         *(.data)
     }

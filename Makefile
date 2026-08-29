@@ -14,7 +14,7 @@ LDFLAGS = -m elf_i386 -T linker.ld
 CXX_SOURCES = kernel/src/main.cpp kernel/src/printf.cpp kernel/src/gdt.cpp kernel/src/memory.cpp kernel/src/idt.cpp kernel/src/isr.cpp  kernel/src/paging.cpp kernel/src/shell.cpp
 CXX_OBJECTS = $(CXX_SOURCES:.cpp=.o)
 ASM_SOURCES = boot/multiboot/boot.asm kernel/src/interrupt.asm
-ASM_OBJECTS = $(ASM_SOURCES:.asm=.o)   # ← 移到这里
+ASM_OBJECTS = $(ASM_SOURCES:.asm=.o)
 OBJECTS = $(CXX_OBJECTS) $(ASM_OBJECTS)
 
 # 目标文件
@@ -27,7 +27,7 @@ all: $(ISO_FILE)
 
 # 编译 C++ 源文件
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CXXFLAGS) -c $< -o $@
 
 # 编译汇编源文件
 %.o: %.asm
@@ -46,7 +46,7 @@ $(ISO_FILE): $(KERNEL_BIN)
 
 # 运行 QEMU
 run: $(ISO_FILE)
-	$(QEMU) -cdrom $^
+	$(QEMU) -cdrom $^ -m 256M -vga std
 
 # 清理构建产物
 clean:
