@@ -81,7 +81,7 @@ XuanJi-OS/
 ├── linker.ld                 # 链接脚本
 ├── Makefile                  # 构建文件
 ├── README.md
-├──version.py
+├── version.sh
 └── .gitignore
 ```
 
