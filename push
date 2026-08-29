@@ -4,6 +4,10 @@ import sys
 
 msg = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "Update XuanJi-OS"
 
+if not os.environ.get("SSH_AUTH_SOCK"):
+    os.system("eval $(ssh-agent) > /dev/null 2>&1")
+    os.system("ssh-add ~/.ssh/id_ed25519 2>/dev/null || ssh-add ~/.ssh/id_rsa 2>/dev/null")
+
 os.system("./version.sh")
 os.system("git add .")
 os.system(f'git commit -m "{msg}"')
