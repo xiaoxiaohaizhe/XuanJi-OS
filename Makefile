@@ -1,3 +1,6 @@
+# 版本号自动生成
+VERSION := $(shell ./version.sh 2>/dev/null || echo "v1.0.0")
+
 # 编译器与链接器
 CC = g++
 ASM = nasm
@@ -6,12 +9,12 @@ QEMU = qemu-system-x86_64
 GRUB_MKRESCUE = grub-mkrescue
 
 # 编译选项
-CFLAGS = -m32 -ffreestanding -nostdlib -fno-exceptions -fno-rtti -I kernel/include
+CXXFLAGS = -m32 -ffreestanding -nostdlib -fno-exceptions -fno-rtti -I kernel/include -DVERSION=\"$(VERSION)\"
 ASMFLAGS = -f elf32
 LDFLAGS = -m elf_i386 -T linker.ld
 
 # 源文件列表
-CXX_SOURCES = kernel/src/main.cpp kernel/src/printf.cpp kernel/src/gdt.cpp kernel/src/memory.cpp kernel/src/idt.cpp kernel/src/isr.cpp  kernel/src/paging.cpp kernel/src/shell.cpp
+CXX_SOURCES = kernel/src/main.cpp kernel/src/printf.cpp kernel/src/gdt.cpp kernel/src/memory.cpp kernel/src/idt.cpp kernel/src/isr.cpp kernel/src/paging.cpp kernel/src/shell.cpp
 CXX_OBJECTS = $(CXX_SOURCES:.cpp=.o)
 ASM_SOURCES = boot/multiboot/boot.asm kernel/src/interrupt.asm
 ASM_OBJECTS = $(ASM_SOURCES:.asm=.o)

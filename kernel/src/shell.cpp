@@ -1,7 +1,6 @@
 #include "print.h"
 #include "isr.h"
 #include "shell.h"
-
 extern char key_buffer[128];
 extern int key_buffer_pos;
 extern int cursor;
@@ -34,7 +33,7 @@ void shell_echo() {
         return;
     }
     
-    printf("\n%s\n", p);
+    printf("%s\n", p);
 }
 
 void shell_process_command() {
@@ -44,14 +43,12 @@ void shell_process_command() {
         len--;
     }
     key_buffer_pos = len;
-
-    printf("\n");
     if (key_buffer[0] == '\0') {
         // 空命令，不处理
     } 
     else if (my_strncmp(key_buffer, "help", 4) == 0) 
     {
-        printf("Commands: help, clear, echo <text>, hello,version\n");
+        printf("Commands: help, clear, echo <text>, hello,520,version\n");
     } 
     else if (my_strncmp(key_buffer, "clear", 5) == 0) 
     {
