@@ -3,46 +3,52 @@
 #include "print.h"
 
 static uint32_t* page_directory = nullptr;
-static uint32_t* page_table_kernel = nullptr;
+static uint32_t* page_tables[32];  // 32 个页表
 
 void paging_init() {
+    // 分配页目录
     page_directory = (uint32_t*)pmm_alloc();
-    page_table_kernel = (uint32_t*)pmm_alloc();
-
-    if (page_directory == nullptr || page_table_kernel == nullptr) {
+    if (page_directory == nullptr) {
+        printf("Paging: page_directory allocation failed!\n");
         return;
     }
 
+    // 清零页目录
     for (int i = 0; i < 1024; i++) {
         page_directory[i] = 0;
-        page_table_kernel[i] = 0;
     }
 
-    // 1. 身份映射 1MB ~ 4MB（内核代码区）
-    for (uint32_t phys = 0x100000; phys < 0x400000; phys += PAGE_SIZE) {
-        uint32_t index = phys / PAGE_SIZE;
-        if (index < 1024) {
-            page_table_kernel[index] = phys | PAGE_PRESENT | PAGE_WRITE;
+    // 分配 32 个页表（映射 128MB）
+    for (int table = 0; table < 32; table++) {
+        page_tables[table] = (uint32_t*)pmm_alloc();
+        if (page_tables[table] == nullptr) {
+            printf("Paging: page_table[%d] allocation failed!\n", table);
+            return;
+        }
+        // 清零页表
+        for (int i = 0; i < 1024; i++) {
+            page_tables[table][i] = 0;
+        }
+        // 填页目录项
+        page_directory[table] = (uint32_t)page_tables[table] | PAGE_PRESENT | PAGE_WRITE;
+    }
+
+    // 映射 0~128MB（身份映射）
+    for (uint32_t table = 0; table < 32; table++) {
+        for (int i = 0; i < 1024; i++) {
+            uint32_t phys = (table * 1024 + i) * PAGE_SIZE;
+            page_tables[table][i] = phys | PAGE_PRESENT | PAGE_WRITE;
         }
     }
 
-    // 2. 映射 VGA 显存（0xB8000 ~ 0xBFFFF）
-    //    这样 printf 在分页启用后仍能正常输出
-    for (uint32_t phys = 0xB8000; phys < 0xC0000; phys += PAGE_SIZE) {
-        uint32_t index = phys / PAGE_SIZE;
-        if (index < 1024) {
-            page_table_kernel[index] = phys | PAGE_PRESENT | PAGE_WRITE;
-        }
-    }
-
-    uint32_t phys_page_table = (uint32_t)page_table_kernel;
-    page_directory[0] = phys_page_table | PAGE_PRESENT | PAGE_WRITE;
-
+    // 加载页目录
     __asm__ volatile ("mov %0, %%cr3" : : "r"((uint32_t)page_directory));
 
+    // 开启分页
     uint32_t cr0;
     __asm__ volatile ("mov %%cr0, %0" : "=r"(cr0));
     cr0 |= 0x80000000;
     __asm__ volatile ("mov %0, %%cr0" : : "r"(cr0));
 
+    printf("Paging: 128MB mapped.\n");
 }

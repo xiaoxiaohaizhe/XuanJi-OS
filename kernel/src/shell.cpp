@@ -4,6 +4,11 @@
 extern char key_buffer[128];
 extern int key_buffer_pos;
 extern int cursor;
+#define MAX_CMD_LEN 128
+#define MAX_HISTORY 100
+static char history_data[MAX_HISTORY][MAX_CMD_LEN];
+static int history_count = 0;
+static int history_next_id = 1;
 static int my_strncmp(const char* a, const char* b, int n) {
     for (int i = 0; i < n; i++) {
         if (a[i] != b[i]) return (unsigned char)a[i] - (unsigned char)b[i];
@@ -20,7 +25,19 @@ void shell_clear() {
     }
     cursor = 0;  // 直接用顶部的 extern，不用重新声明
 }
-
+void add_to_history(const char* cmd) {
+    if (cmd[0] == '\0') return;
+    
+    // 复制命令到 history_data
+    int i = 0;
+    while (cmd[i] && i < MAX_CMD_LEN - 1) {
+        history_data[history_count][i] = cmd[i];
+        i++;
+    }
+    history_data[history_count][i] = '\0';
+    history_count++;
+    history_next_id++;
+}
 void shell_echo() {
     char* p = key_buffer;
     
@@ -35,7 +52,13 @@ void shell_echo() {
     
     printf("%s\n", p);
 }
-
+void shell_history() {
+    int start = history_count - history_count; 
+    for (int i = 0; i < history_count; i++) {
+        int num = i + 1;
+        printf("%d  %s\n", num, history_data[i]);
+    }
+}
 void shell_process_command() {
     int len = key_buffer_pos;
     while (len > 0 && (key_buffer[len - 1] == '\n' || key_buffer[len - 1] == '\r')) {
@@ -48,7 +71,7 @@ void shell_process_command() {
     } 
     else if (my_strncmp(key_buffer, "help", 4) == 0) 
     {
-        printf("Commands: help, clear, echo <text>, hello,520,version\n");
+        printf("Commands: help, clear, echo <text>, hello,history,version\n");
     } 
     else if (my_strncmp(key_buffer, "clear", 5) == 0) 
     {
@@ -66,6 +89,10 @@ void shell_process_command() {
     {
         printf("XuanJi-OS " VERSION "\n");
     }
+    else if (my_strncmp(key_buffer, "history", 7) == 0) 
+    {
+        shell_history();
+    }
     else 
     {
         printf("Unknown command: ");
@@ -73,10 +100,15 @@ void shell_process_command() {
         printf("\n");
     }
 
-    // 清空缓冲区，准备下一条命令
+    //先存历史（缓冲区还没清空）
+    if (key_buffer[0] != '\0') 
+    {
+        add_to_history(key_buffer);
+    }
+
+    // 再清空缓冲区
     key_buffer[0] = '\0';
     key_buffer_pos = 0;
-    
     // 打印提示符（由 shell_init 调用）
     printf("> ");
 }
