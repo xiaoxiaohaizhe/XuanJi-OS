@@ -20,7 +20,6 @@ extern "C" void kmain() {
     idt_load();
 
     __asm__ volatile ("sti");
-
     shell_init();
 
     while (1) {}

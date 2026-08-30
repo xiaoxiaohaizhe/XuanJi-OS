@@ -4,6 +4,7 @@
 extern char key_buffer[128];
 extern int key_buffer_pos;
 extern int cursor;
+extern uint64_t system_ticks;
 #define MAX_CMD_LEN 128
 #define MAX_HISTORY 100
 static char history_data[MAX_HISTORY][MAX_CMD_LEN];
@@ -15,6 +16,23 @@ static int my_strncmp(const char* a, const char* b, int n) {
         if (a[i] == '\0') return 0;
     }
     return 0;
+}
+// 64 位除法（返回商）
+static uint64_t div64(uint64_t a, uint64_t b) {
+    uint64_t quotient = 0;
+    while (a >= b) {
+        a -= b;
+        quotient++;
+    }
+    return quotient;
+}
+
+// 64 位取模（返回余数）
+static uint64_t mod64(uint64_t a, uint64_t b) {
+    while (a >= b) {
+        a -= b;
+    }
+    return a;
 }
 
 void shell_clear() {
@@ -74,15 +92,45 @@ void shell_process_command() {
     } 
     else if (my_strncmp(key_buffer, "help", 4) == 0 && key_buffer[4] == '\0') 
     {
-        printf("Commands: help, clear, echo <text>, hello,history,version\n");
+        printf("Commands: help, clear, echo <text>, hello,history,version,uptime,reboot\n");
     } 
     else if (my_strncmp(key_buffer, "clear", 5) == 0 && key_buffer[5] == '\0') 
     {
         shell_clear();
+    }
+    else if (my_strncmp(key_buffer, "reboot", 6) == 0) {
+        printf("Rebooting...\n");
+        // 触发重启（键盘控制器复位）
+        __asm__ volatile (
+            "mov $0xFE, %%al\n"
+            "out %%al, $0x64\n"
+            ::: "al", "memory"
+        );
+    // 如果上面的方法没生效，用 Triple Fault 重启
+    __asm__ volatile (
+        "mov $0x1234, %%eax\n"
+        "jmp %%eax\n"
+        ::: "eax"
+    );
     } 
     else if (my_strncmp(key_buffer, "echo", 4) == 0 && key_buffer[4] == '\0') 
     {
         shell_echo();
+    }
+    else if (my_strncmp(key_buffer, "uptime", 6) == 0) {
+        uint64_t ms = system_ticks;
+        uint64_t sec = div64(ms, 1000);
+        uint64_t min = div64(sec, 60);
+        uint64_t hour = div64(min, 60);
+    
+        printf("Uptime: %d:%d:%d\n", 
+           (uint32_t)hour, 
+           (uint32_t)mod64(min, 60), 
+           (uint32_t)mod64(sec, 60));
+    }
+    else if (my_strncmp(key_buffer, "reboot", 6) == 0) {
+    printf("Rebooting...\n");
+    __asm__ volatile ("mov $0xFE, %%al; out %%al, $0x64" ::: "al", "memory");
     } 
     else if (my_strncmp(key_buffer, "hello", 5) == 0 && key_buffer[5] == '\0') 
     {

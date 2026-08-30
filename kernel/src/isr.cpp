@@ -4,7 +4,7 @@
 extern int cursor;
 char key_buffer[128];
 int key_buffer_pos = 0;
-
+uint64_t system_ticks = 0;
 static bool shift_pressed = false;
 static bool caps_lock_on = false;
 
@@ -89,8 +89,15 @@ extern "C" void isr_handler(Registers regs) {
     if (regs.int_no >= 40) {
         send_eoi_slave();
         send_eoi_master();
-    } else if (regs.int_no >= 32) {
+    } 
+    else if (regs.int_no >= 32) 
+    {
         send_eoi_master();
+    }
+    if (regs.int_no == 32) 
+    {
+        system_ticks++;
+        return;
     }
 
     if (regs.int_no == 33) {
@@ -129,4 +136,8 @@ extern "C" void isr_handler(Registers regs) {
             }
         }
     }
+}
+uint64_t get_uptime_ms()
+{
+    return system_ticks;
 }

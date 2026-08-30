@@ -1,5 +1,5 @@
 section .text
-global isr0, isr1, isr2, isr3,isr33
+global isr0, isr1, isr2, isr3,isr32,isr33
 extern isr_handler
 extern idtr
 extern grub_magic
@@ -28,6 +28,7 @@ ISR_NOERR 0
 ISR_NOERR 1
 ISR_NOERR 2
 ISR_NOERR 3
+ISR_NOERR 32
 ISR_NOERR 33
 
 ; ---------- 通用中断处理 ----------
