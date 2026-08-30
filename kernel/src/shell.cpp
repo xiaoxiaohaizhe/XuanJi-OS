@@ -72,35 +72,35 @@ void shell_process_command() {
     if (key_buffer[0] == '\0') {
         // 空命令，不处理
     } 
-    else if (my_strncmp(key_buffer, "help", 4) == 0) 
+    else if (my_strncmp(key_buffer, "help", 4) == 0 && key_buffer[4] == '\0') 
     {
         printf("Commands: help, clear, echo <text>, hello,history,version\n");
     } 
-    else if (my_strncmp(key_buffer, "clear", 5) == 0) 
+    else if (my_strncmp(key_buffer, "clear", 5) == 0 && key_buffer[5] == '\0') 
     {
         shell_clear();
     } 
-    else if (my_strncmp(key_buffer, "echo", 4) == 0) 
+    else if (my_strncmp(key_buffer, "echo", 4) == 0 && key_buffer[4] == '\0') 
     {
         shell_echo();
     } 
-    else if (my_strncmp(key_buffer, "hello", 5) == 0) 
+    else if (my_strncmp(key_buffer, "hello", 5) == 0 && key_buffer[5] == '\0') 
     {
         printf("hello can I help you?\n");
     }
-    else if (my_strncmp(key_buffer, "520", 3) == 0) 
+    else if (my_strncmp(key_buffer, "520", 3) == 0 && key_buffer[3] == '\0') 
     {
         printf("I love you!\n");
     }
-    else if (my_strncmp(key_buffer, "1314", 4) == 0) 
+    else if (my_strncmp(key_buffer, "1314", 4) == 0 && key_buffer[4] == '\0') 
     {
         printf("I will love you forever!\n");
     }
-    else if (my_strncmp(key_buffer, "version", 7) == 0) 
+    else if (my_strncmp(key_buffer, "version", 7) == 0 && key_buffer[7] == '\0') 
     {
         printf("XuanJi-OS " VERSION "\n");
     }
-    else if (my_strncmp(key_buffer, "history", 7) == 0) 
+    else if (my_strncmp(key_buffer, "history", 7)== 0 && key_buffer[7] == '\0') 
     {
         shell_history();
     }
