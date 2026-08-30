@@ -40,7 +40,23 @@ static const char scancode_ascii_shift[128] = {
 
 static char scancode_to_ascii(uint8_t scancode) {
     if (scancode >= 0x80) return 0;
+    //小键盘数字键
+    if (scancode == 0x4F) return '1';
+    if (scancode == 0x50) return '2';
+    if (scancode == 0x51) return '3';
+    if (scancode == 0x4B) return '4';
+    if (scancode == 0x4C) return '5';
+    if (scancode == 0x4D) return '6';
+    if (scancode == 0x47) return '7';
+    if (scancode == 0x48) return '8';
+    if (scancode == 0x49) return '9';
+    if (scancode == 0x52) return '0';
 
+    //  小键盘特殊键
+    if (scancode == 0x4A) return '-';   // 小键盘 -
+    if (scancode == 0x4E) return '+';   // 小键盘 +
+    if (scancode == 0x53) return '.';   // 小键盘 .
+    if (scancode == 0x1C) return '\n';  // 小键盘 Enter
     if (scancode == 0x2A || scancode == 0x36) { shift_pressed = true; return 0; }
     if (scancode == 0xAA || scancode == 0xB6) { shift_pressed = false; return 0; }
 
@@ -48,7 +64,7 @@ static char scancode_to_ascii(uint8_t scancode) {
     if (scancode == 0x0E) {
         return '\b';  // 退格字符
     }
-    // ★ 新增：回车键（扫描码 0x1C）
+    // 新增：回车键（扫描码 0x1C）
     if (scancode == 0x1C) {
         return '\n';
     }

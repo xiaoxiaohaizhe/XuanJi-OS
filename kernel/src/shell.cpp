@@ -85,6 +85,14 @@ void shell_process_command() {
     {
         printf("hello can I help you?\n");
     }
+    else if (my_strncmp(key_buffer, "520", 3) == 0) 
+    {
+        printf("I love you!\n");
+    }
+    else if (my_strncmp(key_buffer, "1314", 4) == 0) 
+    {
+        printf("I will love you forever!\n");
+    }
     else if (my_strncmp(key_buffer, "version", 7) == 0) 
     {
         printf("XuanJi-OS " VERSION "\n");

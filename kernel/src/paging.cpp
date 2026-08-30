@@ -49,6 +49,4 @@ void paging_init() {
     __asm__ volatile ("mov %%cr0, %0" : "=r"(cr0));
     cr0 |= 0x80000000;
     __asm__ volatile ("mov %0, %%cr0" : : "r"(cr0));
-
-    printf("Paging: 128MB mapped.\n");
 }
