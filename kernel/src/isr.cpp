@@ -100,21 +100,17 @@ extern "C" void isr_handler(Registers regs) {
         char c = scancode_to_ascii(scancode);
         if (c == 0) return;  // 忽略无效字符
 
-        if (c == '\b') {
-            // 退格处理
-            extern int cursor;
-            if (cursor > 0) {
-                cursor--;
-                print_char(' ');
-                cursor--;
-            }
-            // 从缓冲区移除最后一个字符
-            if (key_buffer_pos > 0) {
-                key_buffer_pos--;
-                key_buffer[key_buffer_pos] = '\0';
-            }
-            return;
+    if (c == '\b') {
+        extern int cursor;
+        if (key_buffer_pos > 0) {
+            cursor--;
+            print_char(' ');
+            cursor--;
+            key_buffer_pos--;
+            key_buffer[key_buffer_pos] = '\0';
         }
+        return;
+    }
 
         if (c == '\n') {
             // 回车：处理命令

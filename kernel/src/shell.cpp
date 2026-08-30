@@ -23,7 +23,10 @@ void shell_clear() {
         video[i * 2] = ' ';
         video[i * 2 + 1] = 0x0F;
     }
-    cursor = 0;  // 直接用顶部的 extern，不用重新声明
+    cursor = 0;
+    
+    // 重新打印
+    printf("=== XuanJi-OS ===\n");
 }
 void add_to_history(const char* cmd) {
     if (cmd[0] == '\0') return;
