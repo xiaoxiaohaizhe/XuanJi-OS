@@ -69,6 +69,7 @@ XuanJi-OS/
 │   │   └── memory.h
 │   │   └── gdt.h
 │   │   └── shell.h
+|   |   └── paging.h
 │   └── src/
 │       ├── main.cpp          # 内核入口 kmain()
 │       └── printf.cpp         # 格式化输出
@@ -78,6 +79,7 @@ XuanJi-OS/
 │       └── idt.cpp
 │       └── gdt.cpp
 │       └── shell.cpp
+|       └── paging.cpp
 ├── linker.ld                 # 链接脚本
 ├── Makefile                  # 构建文件
 ├── README.md
