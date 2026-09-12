@@ -1,6 +1,8 @@
 *.o
 *.bin
 *.iso
+disk.img
+push
 kernel.bin
 xuanji.iso
 iso/
