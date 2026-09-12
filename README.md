@@ -16,7 +16,7 @@
 | 键盘驱动 | ✅ 完成 |
 | Shell 命令解析 | ✅ 完成 |
 | 定时器中断 (PIT) | ✅ 完成 |
-| 文件系统 | ⏳ 待开发 |
+| 文件系统 | ⏳ 开发中 |
 | 进程调度 | ⏳ 待开发 |
 
 ---
@@ -74,6 +74,7 @@ XuanJi-OS/
 │   │   └── shell.h
 |   |   └── paging.h
 │   │   └── version.h
+│   │   └── disk.h
 │   └── src/
 │       ├── main.cpp          # 内核入口 kmain()
 │       └── printf.cpp         # 格式化输出
@@ -84,6 +85,7 @@ XuanJi-OS/
 │       └── gdt.cpp
 │       └── shell.cpp
 |       └── paging.cpp
+│       └── disk.cpp
 ├── linker.ld                 # 链接脚本
 ├── Makefile                  # 构建文件
 ├── README.md
