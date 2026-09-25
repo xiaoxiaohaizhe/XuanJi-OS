@@ -1,6 +1,7 @@
 #include "print.h"
 #include "isr.h"
 #include "shell.h"
+#include "fat12.h"
 extern char key_buffer[128];
 extern int key_buffer_pos;
 extern int cursor;
@@ -92,7 +93,7 @@ void shell_process_command() {
     } 
     else if (my_strncmp(key_buffer, "help", 4) == 0 && key_buffer[4] == '\0') 
     {
-        printf("Commands: help, clear, echo <text>, hello,history,version,uptime,reboot\n");
+        printf("Commands: help, clear, echo <text>, hello,history,version,uptime,reboot,ls,cat <file>\n");
     } 
     else if (my_strncmp(key_buffer, "clear", 5) == 0 && key_buffer[5] == '\0') 
     {
@@ -116,6 +117,13 @@ void shell_process_command() {
     else if (my_strncmp(key_buffer, "echo", 4) == 0 && key_buffer[4] == '\0') 
     {
         shell_echo();
+    }
+    
+    else if (my_strncmp(key_buffer, "ls", 2) == 0) {
+        fat12_list_root();
+    }
+    else if (my_strncmp(key_buffer, "cat ", 4) == 0) {
+        fat12_read_file(key_buffer + 4);
     }
     else if (my_strncmp(key_buffer, "uptime", 6) == 0) {
         uint64_t ms = system_ticks;

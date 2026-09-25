@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include "shell.h"
 #include "disk.h"
-
+#include "fat12.h"
 extern "C" uint32_t grub_magic;
 extern "C" uint32_t grub_info;
 uint8_t sector[512];
@@ -20,6 +20,7 @@ extern "C" void kmain() {
     idt_init();
     idt_load();
     ata_read_sector(0, sector);
+    fat12_init();
 
 
     __asm__ volatile ("sti");

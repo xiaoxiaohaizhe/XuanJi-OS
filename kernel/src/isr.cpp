@@ -105,6 +105,9 @@ extern "C" void isr_handler(Registers regs) {
         __asm__ volatile ("inb $0x60, %0" : "=a"(scancode));
 
         char c = scancode_to_ascii(scancode);
+        if (scancode == 0x23) {
+            __asm__ volatile ("nop");
+        }
         if (c == 0) return;  // 忽略无效字符
 
     if (c == '\b') {
@@ -127,8 +130,7 @@ extern "C" void isr_handler(Registers regs) {
             return;
         }
 
-        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || 
-            (c >= '0' && c <= '9') || c == ' ') {
+        if (c >= 32 && c <= 126) {
             print_char(c);
             if (key_buffer_pos < 127) {
                 key_buffer[key_buffer_pos++] = c;
