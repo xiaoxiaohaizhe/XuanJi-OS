@@ -160,6 +160,58 @@ void shell_process_command() {
     {
         shell_history();
     }
+    else if (my_strncmp(key_buffer, "rm ", 3) == 0) {
+        if (fat12_delete_file(key_buffer + 3) == 0) {
+            printf("Deleted: %s\n", key_buffer + 3);
+        } else {
+            printf("File not found.\n");
+        }
+    }
+        // 创建空文件
+    else if (my_strncmp(key_buffer, "touch ", 6) == 0) 
+    {
+        char* filename = key_buffer + 6;
+        if (fat12_create_file(filename, "", 0) == 0) {
+            printf("Created: %s\n", filename);
+        }
+    }
+    // 写入文件
+    else if (my_strncmp(key_buffer, "write ", 6) == 0) 
+    {
+        char* filename = key_buffer + 6;
+        char* space = filename;
+        while (*space && *space != ' ') space++;
+        
+        if (*space == ' ') {
+            *space = '\0';
+            char* content = space + 1;
+            
+            int len = 0;
+            while (content[len] != '\0') {
+                len++;
+            }
+            
+            if (len > 0) {
+                if (fat12_create_file(filename, content, len) == 0) {
+                    printf("Wrote %d bytes to %s\n", len, filename);
+                }
+            } else {
+                printf("Error: content is empty!\n");
+            }
+        } else {
+            printf("Usage: write <filename> <content>\n");
+        }
+    }
+    // 删除文件
+    else if (my_strncmp(key_buffer, "rm ", 3) == 0) 
+    {
+        char* filename = key_buffer + 3;
+        if (fat12_delete_file(filename) == 0) {
+            printf("Deleted: %s\n", filename);
+        } else {
+            printf("File not found.\n");
+        }
+    }
     else 
     {
         printf("Unknown command: ");
